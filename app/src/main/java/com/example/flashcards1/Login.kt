@@ -56,13 +56,14 @@ fun LoginScreen(modifier:Modifier = Modifier){
             modifier= modifier
                 .fillMaxWidth()
                 .weight(0.5f)
-                .background(Color(0xFFE08601))
-                .clip(shape = RoundedCornerShape(30.dp)),       //HELP
+                .background(Color(0xFFE08601)),
+                      //HELP
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ){
             Column(
-                modifier=modifier.background(Color(0xFFede0d7)).padding(15.dp).clip(shape = RoundedCornerShape(20.dp)),
+                modifier=modifier.clip(shape = RoundedCornerShape(30.dp))
+                .background(Color(0xFFede0d7)).padding(15.dp).clip(shape = RoundedCornerShape(20.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ){

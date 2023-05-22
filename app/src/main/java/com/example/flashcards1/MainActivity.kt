@@ -38,6 +38,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
     @Composable
     fun DefaultPreview() {
         FlashCards1Theme {
-            LoginScreen()
+            SignupScreen()
         }
     }

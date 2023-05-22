@@ -35,34 +35,44 @@ fun SignupScreen (modifier: Modifier = Modifier){
             .background(Color.White)
 
     ) {
-        Column(
+        Row(
             modifier= modifier
                 .fillMaxWidth()
                 .weight(0.5f)
                 .background(Color(0xFFefe4dc)), //uzimamo sta nam treba iz modifier, .fillmaxWidth, .weight0.5(uzimamo pola visine) i koju cemo boju imati u tom column-u
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top                                  //da centrira ikonicu i text unutar tog columna
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Top                                  //da centrira ikonicu i text unutar tog columna
         ){
             Image(painter = painterResource(R.drawable.logo_icon), contentDescription = "icon for app")
-            Column(
+            Row(
                 modifier= modifier
                     .fillMaxWidth()
                     .weight(0.1f)
-                    .background(Color(0xFFefe4dc)),
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Top
+                    .background(Color(0xFFefe4dc))
             ){
+
                 Text(
                     text = "Choose your icon",
-                    modifier = Modifier.padding(top = 20.dp),
-                    textAlign = TextAlign.Left,
-                    fontSize = 20.sp,
+                    modifier = Modifier.padding(top = 70.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 18.sp,
                     color = Color(0xFF000000)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Image(painter = painterResource(R.drawable.girl_icon), contentDescription = "girl icon for app")
-                Image(painter = painterResource(R.drawable.boy_iconn), contentDescription = "boy icon for app")
-            }
+                Spacer(modifier = Modifier.height(1.dp))
+                Column(
+                    modifier= modifier
+                        .fillMaxWidth()
+                        .weight(2f)
+                        .background(Color(0xFFede0d7))
+                        .clip(shape = RoundedCornerShape(30.dp)),       //HELP
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Image(painter = painterResource(R.drawable.girl_icon), contentDescription = "icon for app", modifier = modifier.size(65.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
+                    Image(painter = painterResource(R.drawable.boy_iconn), contentDescription = "icon for app",  modifier = modifier.size(65.dp))
+                }
+               }
         }
         Column(
             modifier= modifier
@@ -74,7 +84,10 @@ fun SignupScreen (modifier: Modifier = Modifier){
             verticalArrangement = Arrangement.Center,
         ){
             Column(
-                modifier=modifier.background(Color(0xFFede0d7)).padding(15.dp).clip(shape = RoundedCornerShape(20.dp)),
+                modifier= modifier
+                    .background(Color(0xFFede0d7))
+                    .padding(15.dp)
+                    .clip(shape = RoundedCornerShape(20.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ){
