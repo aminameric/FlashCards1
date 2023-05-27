@@ -57,7 +57,7 @@ fun LoginScreen(modifier:Modifier = Modifier){
                 .fillMaxWidth()
                 .weight(0.5f)
                 .background(Color(0xFFE08601)),
-                      //HELP
+
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ){
