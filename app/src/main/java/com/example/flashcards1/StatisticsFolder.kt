@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -59,7 +60,7 @@ fun StatisticsFolder(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(modifier = Modifier.padding(16.dp),) {
+            Box(modifier = Modifier.padding(16.dp).clip(RoundedCornerShape(8.dp))) {
                 Column(
                     modifier = modifier
                         .fillMaxWidth()
@@ -80,7 +81,7 @@ fun StatisticsFolder(modifier: Modifier = Modifier) {
                     )
                 }
             }
-            Box(modifier = Modifier.padding(16.dp),) {
+            Box(modifier = Modifier.padding(16.dp).clip(RoundedCornerShape(8.dp))) {
                 Column(
                     modifier = modifier
                         .fillMaxWidth()
@@ -104,3 +105,5 @@ fun StatisticsFolder(modifier: Modifier = Modifier) {
         }
     }
 }
+
+
