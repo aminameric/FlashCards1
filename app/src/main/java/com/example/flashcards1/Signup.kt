@@ -43,7 +43,24 @@ fun SignupScreen (modifier: Modifier = Modifier){
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top                                  //da centrira ikonicu i text unutar tog columna
         ){
-            Image(painter = painterResource(R.drawable.logo_icon), contentDescription = "icon for app")
+            Column() {
+                Image(
+                    painter = painterResource(R.drawable.logo_icon),
+                    contentDescription = "icon for app"
+                )
+                Button(
+                    onClick = {
+                    },
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7))
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.back_button),
+                        contentDescription = "back button",
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+            }
             Row(
                 modifier= modifier
                     .fillMaxWidth()

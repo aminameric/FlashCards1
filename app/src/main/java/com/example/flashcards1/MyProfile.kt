@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -43,6 +44,18 @@ fun MyProfile(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment=Alignment.CenterVertically
         ) {
+            Button(
+                onClick = {
+                },
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7))
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.back_button),
+                    contentDescription = "back button",
+                    modifier = Modifier.size(25.dp)
+                )
+            }
             Image(
                 painter = painterResource(R.drawable.logo_icon),
                 contentDescription = "icon for app"
