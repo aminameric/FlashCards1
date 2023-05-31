@@ -61,7 +61,7 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController) {
             Image(
                 painter = painterResource(R.drawable.back_button),
                 contentDescription = "back button",
-                modifier = Modifier.size(65.dp).clickable{
+                modifier = Modifier.size(35.dp).clickable{
                     navController.navigate("Landing Page")
                 }
             )
@@ -272,20 +272,23 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController) {
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = {
-                },
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD9D9D9))
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.add_icon),
-                    contentDescription = "add button",
-                    modifier = Modifier.size(30.dp)
-                )
-                Text("Add", fontSize = 25.sp, color = Color.Black)
-            }
+            Row() {
+                Button(
+                    onClick = {
+                    },
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD9D9D9))
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.add_icon),
+                        contentDescription = "add button",
+                        modifier = Modifier.size(30.dp)
+                    )
+                    Text("Add", fontSize = 25.sp, color = Color.Black)
 
+
+                }
+            }
         }
     }
 }
