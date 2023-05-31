@@ -2,8 +2,11 @@ package com.example.flashcards1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,16 +18,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 
 @Composable
-fun Cards(modifier: Modifier = Modifier) {
+fun Cards(modifier: Modifier = Modifier, navController: NavHostController) {
     Column(                                                    //function
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
 
     ) {
+        Row(){
+            Button(
+                onClick = {
+                },
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7))
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.back_button),
+                    contentDescription = "back button",
+                    modifier = Modifier.size(25.dp).clickable{
+                        navController.navigate("Landing Page")
+                    }
+                )
+            }
+        }
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -41,7 +61,8 @@ fun Cards(modifier: Modifier = Modifier) {
                 text = "Midterm Preparation/Cards",
                 modifier = Modifier
                     .padding(top = 20.dp)
-                    .background(Color(0xFFE08601), RoundedCornerShape(8.dp)),
+                    .background(Color(0xFFE08601), RoundedCornerShape(8.dp))
+                ,
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
                 color = Color.Black

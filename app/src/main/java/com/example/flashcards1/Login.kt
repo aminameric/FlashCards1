@@ -2,6 +2,7 @@ package com.example.flashcards1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,10 +23,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 
 @Composable
-fun LoginScreen(modifier:Modifier = Modifier){
+fun LoginScreen(modifier:Modifier = Modifier, navController: NavHostController){
     var email by remember { mutableStateOf("") }       //mutable state of, with strings
     var password by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current            //fokusiran na one text field kad kliknemo na nesto
@@ -131,13 +133,15 @@ fun LoginScreen(modifier:Modifier = Modifier){
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text="Log in", fontSize = 25.sp, color=Color(0xFFE08601)
+                    text="Log in", fontSize = 25.sp, color=Color(0xFFE08601), modifier=Modifier.clickable{
+                        navController.navigate("Landing Page")
+                    }
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
             Spacer(modifier = Modifier.height(12.dp))
             Button(
-                onClick = { },
+                onClick = { navController.navigate("Signup")},
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7))
             ) {

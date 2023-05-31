@@ -29,9 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 @Composable
-fun MyProfile(modifier: Modifier = Modifier) {
+fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -45,7 +46,7 @@ fun MyProfile(modifier: Modifier = Modifier) {
             verticalAlignment=Alignment.CenterVertically
         ) {
             Button(
-                onClick = {
+                onClick = {navController.navigate("Landing Page")
                 },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7))
@@ -65,10 +66,11 @@ fun MyProfile(modifier: Modifier = Modifier) {
                     imageVector = Icons.Rounded.ExitToApp,
                     contentDescription = null,
                     modifier
+
                         .height(100.dp)
                         .width(100.dp)
                         .padding(20.dp)
-                        .clickable(onClick = { }),
+                        .clickable(onClick = { navController.navigate("Login") }),
                     tint = Color.Black,
                 )
             }

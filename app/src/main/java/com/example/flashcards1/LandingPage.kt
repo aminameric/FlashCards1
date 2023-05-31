@@ -2,6 +2,7 @@ package com.example.flashcards1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -78,7 +79,7 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
             ) {
 
                 Button(
-                    onClick = {
+                    onClick = {navController.navigate("StatisticsFolder")
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
@@ -87,7 +88,7 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Button(
-                    onClick = {
+                    onClick = { navController.navigate("StatisticsFolder")
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
@@ -114,7 +115,7 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
             ) {
 
                 Button(
-                    onClick = {
+                    onClick = { navController.navigate("StatisticsFolder")
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
@@ -123,7 +124,7 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Button(
-                    onClick = {
+                    onClick = { navController.navigate("StatisticsFolder")
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
@@ -149,7 +150,7 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
             ) {
 
                 Button(
-                    onClick = {
+                    onClick = { navController.navigate("StatisticsFolder")
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
@@ -158,7 +159,7 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Button(
-                    onClick = {
+                    onClick = { navController.navigate("StatisticsFolder")
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
@@ -181,7 +182,9 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                     Image(
                         painter = painterResource(R.drawable.home_icon),
                         contentDescription = "icon for home page",
-                        modifier = Modifier.size(65.dp)
+                        modifier = Modifier.size(65.dp).clickable{
+                            navController.navigate("Landing Page")
+                        }
                     )
                     Text("Home", fontSize = 30.sp, color = Color.Black)
                 }
@@ -198,7 +201,9 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                     Image(
                         painter = painterResource(R.drawable.add_icon),
                         contentDescription = "icon for add",
-                        modifier = Modifier.size(65.dp)
+                        modifier = Modifier.size(65.dp).clickable{
+                            navController.navigate("Add")
+                        }
                     )
                     Text("Add", fontSize = 30.sp, color = Color.Black)
                 }
@@ -215,7 +220,9 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                     Image(
                         painter = painterResource(R.drawable.profile_icon),
                         contentDescription = "icon for profile page",
-                        modifier = Modifier.size(65.dp)
+                        modifier = Modifier.size(65.dp).clickable{
+                            navController.navigate("MyProfile")
+                        }
                     )
                     Text("Profile", fontSize = 30.sp, color = Color.Black)
                 }

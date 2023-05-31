@@ -2,6 +2,7 @@ package com.example.flashcards1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,9 +38,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 @Composable
-fun Add(modifier: Modifier = Modifier) {
+fun Add(modifier: Modifier = Modifier, navController: NavHostController) {
     var title by remember { mutableStateOf("") }
     var question by remember { mutableStateOf("") }
     var answer by remember { mutableStateOf("") }
@@ -59,7 +61,9 @@ fun Add(modifier: Modifier = Modifier) {
             Image(
                 painter = painterResource(R.drawable.back_button),
                 contentDescription = "back button",
-                modifier = Modifier.size(65.dp)
+                modifier = Modifier.size(65.dp).clickable{
+                    navController.navigate("Landing Page")
+                }
             )
             Image(
                 painter = painterResource(R.drawable.logo_icon),

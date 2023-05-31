@@ -2,6 +2,7 @@ package com.example.flashcards1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,9 +21,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 @Composable
-fun SignupScreen (modifier: Modifier = Modifier){
+fun SignupScreen (modifier: Modifier = Modifier, navController: NavHostController){
     var firstname by remember { mutableStateOf("") }
     var lastname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }       //mutable state of, with strings
@@ -57,7 +59,8 @@ fun SignupScreen (modifier: Modifier = Modifier){
                     Image(
                         painter = painterResource(R.drawable.back_button),
                         contentDescription = "back button",
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(25.dp).clickable{navController.navigate("Login")
+                        }
                     )
                 }
             }
@@ -266,7 +269,9 @@ fun SignupScreen (modifier: Modifier = Modifier){
             }
             Spacer(modifier = Modifier.height(12.dp))
             Button(
-                onClick = { },
+                onClick = {
+                    navController.navigate("Landing Page")
+                },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7))
             ) {

@@ -2,6 +2,7 @@ package com.example.flashcards1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,8 +36,7 @@ fun StatisticsFolder(modifier: Modifier = Modifier,  navController: NavHostContr
             .background(Color(0xFFefe4dc))
     ) {
         Row(){
-            BackButton(optionName = "Back Button", destination = { navController.navigate("LandingPage") })
-            /*Button(
+            Button(
                 onClick = {
                 },
                 shape = RoundedCornerShape(50),
@@ -45,9 +45,11 @@ fun StatisticsFolder(modifier: Modifier = Modifier,  navController: NavHostContr
                 Image(
                     painter = painterResource(R.drawable.back_button),
                     contentDescription = "back button",
-                    modifier = Modifier.size(25.dp)
+                    modifier = Modifier.size(25.dp).clickable{
+                        navController.navigate("Landing Page")
+                    }
                 )
-            }*/
+            }
         }
         Column(
             modifier = modifier
@@ -86,7 +88,10 @@ fun StatisticsFolder(modifier: Modifier = Modifier,  navController: NavHostContr
                         modifier = Modifier
                             .padding(20.dp)
                             .fillMaxWidth()
-                            .background(Color(0xFFD9D9D9), RoundedCornerShape(8.dp)),
+                            .background(Color(0xFFD9D9D9), RoundedCornerShape(8.dp)).clickable{
+                                navController.navigate("StatisticsFolder")
+                            }
+                        ,
                         textAlign = TextAlign.Center,
                         fontSize = 55.sp,
                         color = Color.Black
@@ -97,7 +102,10 @@ fun StatisticsFolder(modifier: Modifier = Modifier,  navController: NavHostContr
                     text = "Final Preparation",
                     modifier = Modifier
                         .padding(20.dp)
-                        .background(Color(0xFFD9D9D9), RoundedCornerShape(8.dp)),
+                        .background(Color(0xFFD9D9D9), RoundedCornerShape(8.dp)).clickable{
+                            navController.navigate("StatisticsFolder")
+                        }
+                    ,
                     textAlign = TextAlign.Center,
                     fontSize = 55.sp,
                     color = Color.Black
@@ -106,20 +114,5 @@ fun StatisticsFolder(modifier: Modifier = Modifier,  navController: NavHostContr
         }
     }
 }
-@Composable
-fun BackButton(modifier: Modifier = Modifier, optionName: String, destination: () -> Unit) {
-    Button(
-        onClick = destination,
-        shape = RoundedCornerShape(50),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7)),
-        modifier = modifier
-            .width(300.dp)
-    ) {
-        Image(
-            painter = painterResource(R.drawable.back_button),
-            contentDescription = "back button",
-            modifier = Modifier.size(25.dp)
-        )
-    }
-}
+
 
