@@ -34,12 +34,14 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(modifier: Modifier = Modifier) {
     LoginScreen()
 }
-    @Preview(showBackground = true)
-    @Composable
+@Preview(showBackground = true)
+@Composable
     fun DefaultPreview() {
         FlashCards1Theme {
-            StatisticsFolder()
+            Quiz()
         }
     }
+
+
 
 

@@ -5,16 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,30 +20,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 
 @Composable
-fun StatisticsFolder(modifier: Modifier = Modifier,  navController: NavHostController) {
+fun CardsVSQuiz(modifier: Modifier = Modifier) {
     Column(                                                    //function
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFefe4dc))
+            .background(Color.White)
+
     ) {
-        Row(){
-            BackButton(optionName = "Back Button", destination = { navController.navigate("LandingPage") })
-            /*Button(
-                onClick = {
-                },
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7))
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.back_button),
-                    contentDescription = "back button",
-                    modifier = Modifier.size(25.dp)
-                )
-            }*/
-        }
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -81,45 +61,47 @@ fun StatisticsFolder(modifier: Modifier = Modifier,  navController: NavHostContr
             verticalArrangement = Arrangement.Center
         ) {
             Box(modifier = Modifier.padding(16.dp).clip(RoundedCornerShape(8.dp))) {
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .background(Color(0xFFD9D9D9))
+                        .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
                     Text(
-                        text = "Midterm Preparation",
+                        text = "Cards",
                         modifier = Modifier
-                            .padding(20.dp)
-                            .fillMaxWidth()
+                            .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp)
                             .background(Color(0xFFD9D9D9), RoundedCornerShape(8.dp)),
                         textAlign = TextAlign.Center,
-                        fontSize = 55.sp,
+                        fontSize = 40.sp,
                         color = Color.Black
                     )
                 }
+            }
             Box(modifier = Modifier.padding(16.dp).clip(RoundedCornerShape(8.dp))) {
-                Text(
-                    text = "Final Preparation",
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .background(Color(0xFFD9D9D9), RoundedCornerShape(8.dp)),
-                    textAlign = TextAlign.Center,
-                    fontSize = 55.sp,
-                    color = Color.Black
-                )
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .background(Color(0xFFD9D9D9))
+                        .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Quiz",
+                        modifier = Modifier
+                            .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp)
+                            .background(Color(0xFFD9D9D9), RoundedCornerShape(8.dp)),
+                        textAlign = TextAlign.Center,
+                        fontSize = 40.sp,
+                        color = Color.Black
+                    )
+                }
             }
         }
     }
 }
-@Composable
-fun BackButton(modifier: Modifier = Modifier, optionName: String, destination: () -> Unit) {
-    Button(
-        onClick = destination,
-        shape = RoundedCornerShape(50),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFede0d7)),
-        modifier = modifier
-            .width(300.dp)
-    ) {
-        Image(
-            painter = painterResource(R.drawable.back_button),
-            contentDescription = "back button",
-            modifier = Modifier.size(25.dp)
-        )
-    }
-}
-
