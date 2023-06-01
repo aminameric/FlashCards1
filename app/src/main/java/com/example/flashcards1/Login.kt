@@ -24,10 +24,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.flashcards1.data.FlashCards1Application
+import com.example.flashcards1.data.MyDatabase
+import com.example.flashcards1.data.User
+import com.example.flashcards1.data.UserViewModel
 
 
 @Composable
-fun LoginScreen(modifier:Modifier = Modifier, navController: NavHostController){
+fun LoginScreen(modifier:Modifier = Modifier, navController: NavHostController, db: MyDatabase){
+    val userViewModel = UserViewModel(db.userDao())
     var email by remember { mutableStateOf("") }       //mutable state of, with strings
     var password by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current            //fokusiran na one text field kad kliknemo na nesto
@@ -134,7 +139,12 @@ fun LoginScreen(modifier:Modifier = Modifier, navController: NavHostController){
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text="Log in", fontSize = 25.sp, color=Color(0xFFE08601), modifier=Modifier.clickable{
-                        navController.navigate("Landing Page")
+                        val user: User? = userViewModel.getUserById(email = email, password = password)
+
+                        if(user != null) {
+                            LoggedUser.user = user
+                            navController?.navigate("Landing Page")
+                        }
                     }
                 )
                 Spacer(modifier = Modifier.height(12.dp))

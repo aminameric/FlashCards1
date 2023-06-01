@@ -1,5 +1,6 @@
 package com.example.flashcards1
 
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,15 +23,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.flashcards1.data.FlashCards1Application
+import com.example.flashcards1.data.MyDatabase
+import com.example.flashcards1.data.User
+import com.example.flashcards1.data.UserViewModel
 
 @Composable
-fun SignupScreen (modifier: Modifier = Modifier, navController: NavHostController){
+fun SignupScreen (modifier: Modifier = Modifier, navController: NavHostController, db: MyDatabase){
+    val userViewModel = UserViewModel(db.userDao())
     var firstname by remember { mutableStateOf("") }
     var lastname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }       //mutable state of, with strings
     var password by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("") }
-    val focusManager = LocalFocusManager.current            //fokusiran na one text field kad kliknemo na nesto
+    var icon: Int = 0
+    val focusManager = LocalFocusManager.current //fokusiran na one text field kad kliknemo na nesto
     Column(                                                    //function
         modifier= modifier
             .fillMaxSize()
@@ -88,9 +95,9 @@ fun SignupScreen (modifier: Modifier = Modifier, navController: NavHostControlle
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    Image(painter = painterResource(R.drawable.girl_icon), contentDescription = "icon for app", modifier = modifier.size(65.dp))
+                    Image(painter = painterResource(R.drawable.girl_icon), contentDescription = "icon for app", modifier = modifier.size(65.dp).clickable {icon = R.drawable.girl_icon  })
                             Spacer(modifier = Modifier.height(20.dp))
-                    Image(painter = painterResource(R.drawable.boy_iconn), contentDescription = "icon for app",  modifier = modifier.size(65.dp))
+                    Image(painter = painterResource(R.drawable.boy_iconn), contentDescription = "icon for app",  modifier = modifier.size(65.dp).clickable { icon = R.drawable.boy_iconn })
                 }
                }
         }
@@ -270,6 +277,9 @@ fun SignupScreen (modifier: Modifier = Modifier, navController: NavHostControlle
             Spacer(modifier = Modifier.height(12.dp))
             Button(
                 onClick = {
+                    val newUser = User(email = email, firstName = firstname, lastName = lastname, icon = icon, location = location, password = password)
+                    userViewModel.insert(newUser)
+                    LoggedUser.user = newUser
                     navController.navigate("Landing Page")
                 },
                 shape = RoundedCornerShape(50),

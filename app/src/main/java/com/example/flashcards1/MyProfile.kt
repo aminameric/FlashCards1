@@ -83,21 +83,22 @@ fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ){
-            Image(painter=painterResource(R.drawable.images__2_), contentDescription = "example_where icon will be placed")
+            LoggedUser.user?.let { painterResource(it.icon) }
+                ?.let { Image(painter= it, contentDescription = "example_where icon will be placed") }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Name and Surname",
+            Text(text = "${LoggedUser.user?.firstName} ${LoggedUser.user?.lastName}",
                 modifier = Modifier.padding(top = 20.dp),
                 textAlign = TextAlign.Left,
                 fontSize = 20.sp,
                 color = Color(0xFF000000))
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Email",
+            Text(text = "${LoggedUser.user?.email}",
                 modifier = Modifier.padding(top = 20.dp),
                 textAlign = TextAlign.Left,
                 fontSize = 20.sp,
                 color = Color(0xFF000000))
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Location",
+            Text(text = "${LoggedUser.user?.location}",
                 modifier = Modifier.padding(top = 20.dp),
                 textAlign = TextAlign.Left,
                 fontSize = 20.sp,
