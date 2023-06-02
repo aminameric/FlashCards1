@@ -26,11 +26,16 @@ import androidx.navigation.NavHostController
 import com.example.flashcards1.data.FlashCards1Application
 import com.example.flashcards1.data.MyDatabase
 import com.example.flashcards1.data.User
+import com.example.flashcards1.data.UserDao
 import com.example.flashcards1.data.UserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun SignupScreen (modifier: Modifier = Modifier, navController: NavHostController, db: MyDatabase){
-    val userViewModel = UserViewModel(db.userDao())
+fun SignupScreen (modifier: Modifier = Modifier, navController: NavHostController, userViewModel:UserViewModel){
+
+    val myScope = CoroutineScope(Dispatchers.Default)
     var firstname by remember { mutableStateOf("") }
     var lastname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }       //mutable state of, with strings
@@ -278,7 +283,7 @@ fun SignupScreen (modifier: Modifier = Modifier, navController: NavHostControlle
             Button(
                 onClick = {
                     val newUser = User(email = email, firstName = firstname, lastName = lastname, icon = icon, location = location, password = password)
-                    userViewModel.insert(newUser)
+                    myScope.launch{userViewModel.insert(newUser)}
                     LoggedUser.user = newUser
                     navController.navigate("Landing Page")
                 },

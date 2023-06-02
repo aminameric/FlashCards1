@@ -70,7 +70,9 @@ fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
                         .height(100.dp)
                         .width(100.dp)
                         .padding(20.dp)
-                        .clickable(onClick = { navController.navigate("Login") }),
+                        .clickable(onClick = { LoggedUser.user=null
+                            navController.navigate("Login") })
+                    ,
                     tint = Color.Black,
                 )
             }

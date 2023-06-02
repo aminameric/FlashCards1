@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 
-class UserViewModel (private val userDao : UserDao): ViewModel(){
+class UserViewModel(private val userDao: UserDao): ViewModel(){
+
 
     fun getUserById(email: String, password: String): User? = userDao.getUserById(email=email, password=password)
-
     fun insert(user:User)= userDao.insert(user)
 
     fun delete (user: User)= userDao.delete(user)

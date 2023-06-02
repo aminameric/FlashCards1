@@ -36,16 +36,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.flashcards1.data.Folder
+import com.example.flashcards1.data.FolderViewModel
+import com.example.flashcards1.data.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun Add(modifier: Modifier = Modifier, navController: NavHostController) {
+fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderViewModel: FolderViewModel) {
+    val myScope = CoroutineScope(Dispatchers.Default)
     var title by remember { mutableStateOf("") }
     var question by remember { mutableStateOf("") }
     var answer by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -113,7 +122,15 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController) {
                     modifier = modifier
                         .clip(RoundedCornerShape(10.dp))
                         .height(55.dp)
-                        .width(300.dp),
+                        .width(300.dp)
+                        .clickable {
+                            /*val newFolder = Folder(name=name, userId = 0, folderId = 0)
+                            myScope.launch{folderViewModel.insert(newFolder)}
+                            LoggedUser.user = newUser
+                            navController.navigate("Landing Page")*/
+
+                        },
+
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
                         placeholderColor = Color.Gray,
@@ -143,7 +160,9 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController) {
                     Image(
                         painter = painterResource(R.drawable.add_icon),
                         contentDescription = "add new folder",
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(30.dp).clickable {
+
+                        }
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
@@ -287,6 +306,23 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController) {
                     Text("Add", fontSize = 25.sp, color = Color.Black)
 
 
+                }
+                Button(
+                    onClick = {
+                    },
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
+                ) {
+                    Text("Private", fontSize = 20.sp, color = Color.White)
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(
+                    onClick = {
+                    },
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
+                ) {
+                    Text("Public", fontSize = 20.sp, color = Color.White)
                 }
             }
         }

@@ -4,6 +4,7 @@ package com.example.flashcards1.data
 import androidx.room.*
 
 
+
 @Dao
 interface UserDao {
     @Insert
@@ -17,6 +18,8 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE email = :email AND password = :password")
     fun getUserById(email: String, password: String): User?
+
+
 
 
 }

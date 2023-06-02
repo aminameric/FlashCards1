@@ -89,9 +89,8 @@ fun StatisticsFolder(modifier: Modifier = Modifier,  navController: NavHostContr
                             .padding(20.dp)
                             .fillMaxWidth()
                             .background(Color(0xFFD9D9D9), RoundedCornerShape(8.dp)).clickable{
-                                navController.navigate("StatisticsFolder")
-                            }
-                        ,
+                                navController.navigate("CardsVSQuiz")
+                            },
                         textAlign = TextAlign.Center,
                         fontSize = 55.sp,
                         color = Color.Black
