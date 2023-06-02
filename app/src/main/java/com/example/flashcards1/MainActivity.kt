@@ -49,7 +49,7 @@ fun MainScreen(modifier: Modifier = Modifier, db: MyDatabase) {
     NavHost(navController = navController, startDestination = "Login"){
         composable("Login"){ LoginScreen(navController = navController, userViewModel = userViewModel)}
         composable("Signup"){ SignupScreen(navController = navController, userViewModel = userViewModel)}
-        composable("Add"){ Add(navController = navController, userViewModel = folderViewModel)}
+        composable("Add"){ Add(navController = navController, folderViewModel = folderViewModel)}
         composable("Cards"){ Cards(navController = navController)}
         composable("CardsVSQuiz"){ CardsVSQuiz(navController = navController) }
         composable("Landing Page"){ LandingPage(navController = navController)}
