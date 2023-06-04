@@ -18,7 +18,7 @@ interface CardDao {
     @Query("SELECT * FROM cards WHERE cardId = :cardId")
     fun getCardById(cardId : Int): Card?
 
-    @Query("SELECT * FROM cards WHERE deckId = :deckId")
-    fun getCardByDeckId(deckId : Int): List<Card>?
+    @Query("SELECT * FROM cards WHERE setId = :setId")
+    fun getCardBySetId(setId : Int): List<Card>
 
 }

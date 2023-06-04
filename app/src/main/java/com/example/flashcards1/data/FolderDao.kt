@@ -18,5 +18,5 @@ interface FolderDao {
     fun getFolderById(folderId : Int): Folder?
 
     @Query("SELECT * FROM folders WHERE userId = :userId")   //returns list of folders
-    fun getFolderByUserId(userId : Int): List<Folder>?
+    fun getFolderByUserId(userId : Int): List<Folder>
 }

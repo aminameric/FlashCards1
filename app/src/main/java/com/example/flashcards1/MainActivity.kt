@@ -13,8 +13,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.flashcards1.data.CardViewModel
 import com.example.flashcards1.data.FolderViewModel
 import com.example.flashcards1.data.MyDatabase
+import com.example.flashcards1.data.SetViewModel
 import com.example.flashcards1.data.UserViewModel
 import com.example.flashcards1.ui.theme.FlashCards1Theme
 
@@ -44,18 +46,17 @@ fun MainScreen(modifier: Modifier = Modifier, db: MyDatabase) {
 
     //val userViewModel=db.userDao()
     val userViewModel=UserViewModel(db.userDao())
+    val setViewModel = SetViewModel(db.setDao())
     val folderViewModel= FolderViewModel(db.folderDao())
+    val cardViewModel = CardViewModel(db.cardDao())
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "Login"){
         composable("Login"){ LoginScreen(navController = navController, userViewModel = userViewModel)}
         composable("Signup"){ SignupScreen(navController = navController, userViewModel = userViewModel)}
-        composable("Add"){ Add(navController = navController, folderViewModel = folderViewModel)}
-        composable("Cards"){ Cards(navController = navController)}
-        composable("CardsVSQuiz"){ CardsVSQuiz(navController = navController) }
-        composable("Landing Page"){ LandingPage(navController = navController)}
-        composable("MyProfile"){ MyProfile(navController = navController) }
-        composable("Quiz"){ Quiz(navController = navController) }
-        composable("StatisticsFolder"){ StatisticsFolder(navController = navController) }
+        composable("Add"){ Add(navController = navController, folderViewModel = folderViewModel, setViewModel = setViewModel, cardViewModel = cardViewModel)}
+        composable("Cards"){ Cards(navController = navController, cardViewModel = cardViewModel, setViewModel = setViewModel)}
+        composable("Landing Page"){ LandingPage(navController = navController, folderViewModel = folderViewModel, setViewModel = setViewModel)}
+        composable("MyProfile"){ MyProfile(navController = navController, setViewModel = setViewModel, folderViewModel = folderViewModel) }
     }
 }
 @Preview(showBackground = true)

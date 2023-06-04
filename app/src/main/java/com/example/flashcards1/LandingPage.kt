@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -30,9 +32,31 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.flashcards1.data.Folder
+import com.example.flashcards1.data.FolderViewModel
+import com.example.flashcards1.data.Set
+import com.example.flashcards1.data.SetViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController) {
+fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController, folderViewModel: FolderViewModel, setViewModel: SetViewModel) {
+    var mySets: List<Set> = listOf()
+    var myFolders: List<Folder> = listOf()
+    val myScope = CoroutineScope(Dispatchers.Default)
+
+    fun getFoldersAndSets() {
+        myScope.launch {
+            if(LoggedUser.user != null) {
+                myFolders = folderViewModel.getFolderByUserId(LoggedUser.user!!.userId)
+                mySets = setViewModel.getSetByUser(LoggedUser.user!!.userId)
+
+            }
+        }
+    }
+    getFoldersAndSets()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -63,7 +87,31 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
             verticalArrangement = Arrangement.Top
         ) {
             Text(
-                text = "Most popular",
+                text = "Public Sets",
+                modifier = Modifier.padding(start = 16.dp, top = 10.dp),
+                textAlign = TextAlign.Start,
+                fontSize = 25.sp,
+                color = Color(0xFF000000)
+            )
+            Row(
+                modifier = modifier
+                    .clip(shape = RoundedCornerShape(8.dp))
+                    .background(Color(0xFFD9D9D9))
+                    .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                LazyRow {
+                    items(mySets) {
+                        item ->  if (item.privacy) {
+                            SetTemplate(set = item, navController = navController)
+                        }
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(60.dp))
+            Text(
+                text = "My Sets",
                 modifier = Modifier.padding(start = 16.dp, top = 10.dp),
                 textAlign = TextAlign.Start,
                 fontSize = 25.sp,
@@ -77,94 +125,10 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-
-                Button(
-                    onClick = {navController.navigate("StatisticsFolder")
-                    },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                ) {
-                    Text("Calculus", fontSize = 20.sp, color = Color.Black)
-                }
-                Spacer(modifier = Modifier.width(20.dp))
-                Button(
-                    onClick = { navController.navigate("StatisticsFolder")
-                    },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                ) {
-                    Text("Programming", fontSize = 20.sp, color = Color.Black)
-                }
-
-            }
-            Spacer(modifier = Modifier.height(60.dp))
-            Text(
-                text = "Recently used",
-                modifier = Modifier.padding(start = 16.dp, top = 10.dp),
-                textAlign = TextAlign.Start,
-                fontSize = 25.sp,
-                color = Color(0xFF000000)
-            )
-            Row(
-                modifier = modifier
-                    .clip(shape = RoundedCornerShape(8.dp))
-                    .background(Color(0xFFD9D9D9))
-                    .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-
-                Button(
-                    onClick = { navController.navigate("StatisticsFolder")
-                    },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                ) {
-                    Text("Calculus", fontSize = 20.sp, color = Color.Black)
-                }
-                Spacer(modifier = Modifier.width(20.dp))
-                Button(
-                    onClick = { navController.navigate("StatisticsFolder")
-                    },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                ) {
-                    Text("Programming", fontSize = 20.sp, color = Color.Black)
-                }
-
-            }
-            Spacer(modifier = Modifier.height(60.dp))
-            Text(
-                text = "Folders",
-                modifier = Modifier.padding(start = 16.dp, top = 10.dp),
-                textAlign = TextAlign.Start,
-                fontSize = 25.sp,
-                color = Color(0xFF000000)
-            )
-            Row(
-                modifier = modifier
-                    .clip(shape = RoundedCornerShape(8.dp))
-                    .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-
-                Button(
-                    onClick = { navController.navigate("StatisticsFolder")
-                    },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                ) {
-                    Text("Calculus", fontSize = 20.sp, color = Color.Black)
-                }
-                Spacer(modifier = Modifier.width(20.dp))
-                Button(
-                    onClick = { navController.navigate("StatisticsFolder")
-                    },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                ) {
-                    Text("Programming", fontSize = 20.sp, color = Color.Black)
+                LazyRow {
+                    items(mySets) {
+                        item -> SetTemplate(set = item, navController = navController)
+                    }
                 }
 
             }
@@ -182,9 +146,11 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                     Image(
                         painter = painterResource(R.drawable.home_icon),
                         contentDescription = "icon for home page",
-                        modifier = Modifier.size(65.dp).clickable{
-                            navController.navigate("Landing Page")
-                        }
+                        modifier = Modifier
+                            .size(65.dp)
+                            .clickable {
+                                navController.navigate("Landing Page")
+                            }
                     )
                     Text("Home", fontSize = 30.sp, color = Color.Black)
                 }
@@ -201,9 +167,11 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                     Image(
                         painter = painterResource(R.drawable.add_icon),
                         contentDescription = "icon for add",
-                        modifier = Modifier.size(65.dp).clickable{
-                            navController.navigate("Add")
-                        }
+                        modifier = Modifier
+                            .size(65.dp)
+                            .clickable {
+                                navController.navigate("Add")
+                            }
                     )
                     Text("Add", fontSize = 30.sp, color = Color.Black)
                 }
@@ -220,9 +188,11 @@ fun LandingPage(modifier: Modifier = Modifier, navController: NavHostController)
                     Image(
                         painter = painterResource(R.drawable.profile_icon),
                         contentDescription = "icon for profile page",
-                        modifier = Modifier.size(65.dp).clickable{
-                            navController.navigate("MyProfile")
-                        }
+                        modifier = Modifier
+                            .size(65.dp)
+                            .clickable {
+                                navController.navigate("MyProfile")
+                            }
                     )
                     Text("Profile", fontSize = 30.sp, color = Color.Black)
                 }

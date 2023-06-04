@@ -9,5 +9,6 @@ data class Set(
     @PrimaryKey(autoGenerate = true) val setId: Int = 0,
     var privacy: Boolean,
     var name: String,
-    var folderId: Int
+    var folderId: Int,
+    var userId: Int
 )

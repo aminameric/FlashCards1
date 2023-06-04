@@ -10,6 +10,8 @@ class FolderViewModel (private val folderDao : FolderDao): ViewModel(){
 
     fun getFolderById(folderId : Int): Folder? = folderDao.getFolderById(folderId = folderId)
 
+    fun getFolderByUserId(userId: Int): List<Folder> = folderDao.getFolderByUserId(userId = userId)
+
     fun insert(folder:Folder)= folderDao.insert(folder)
 
     fun delete (folder:Folder)= folderDao.delete(folder)

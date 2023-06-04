@@ -7,7 +7,7 @@ import androidx.room.Relation
 @Entity(tableName = "cards")
 data class Card(
     @PrimaryKey(autoGenerate = true) val cardId: Int = 0,
-    var deckId: Int,
+    var setId: Int,
     var question: String,
     var answer: String
 )

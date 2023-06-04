@@ -19,6 +19,9 @@ interface SetDao {
     fun getSetById(setId : Int): Set?
 
     @Query("SELECT * FROM sets WHERE folderId = :folderId")
-    fun getSetByFolderId(folderId : Int): List<Set>?
+    fun getSetByFolderId(folderId : Int): List<Set>
+
+    @Query("SELECT * FROM sets WHERE userId = :userId")
+    fun getSetByUser(userId: Int): List<Set>
 
 }

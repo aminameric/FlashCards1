@@ -10,9 +10,11 @@ class SetViewModel (private val setDao : SetDao): ViewModel(){
 
     fun getSetById(setId:Int): Set? = setDao.getSetById(setId= setId)
 
-    fun getSetByFolderId(folderId:Int): List<Set>? = setDao.getSetByFolderId(folderId=folderId)
+    fun getSetByFolderId(folderId:Int): List<Set> = setDao.getSetByFolderId(folderId=folderId)
 
-    fun insert(set:Set)= setDao.insert(set)
+    fun getSetByUser(userId: Int): List<Set> = setDao.getSetByUser(userId = userId)
+
+    fun insert(set: Set)= setDao.insert(set)
 
     fun delete (set: Set)= setDao.delete(set)
 

@@ -13,7 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -30,9 +34,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.flashcards1.data.Folder
+import com.example.flashcards1.data.FolderViewModel
+import com.example.flashcards1.data.Set
+import com.example.flashcards1.data.SetViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
+fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController, folderViewModel: FolderViewModel, setViewModel: SetViewModel) {
+    var mySets: List<Set> = listOf()
+    var myFolders: List<Folder> = listOf()
+    val myScope = CoroutineScope(Dispatchers.Default)
+
+
+    fun getFoldersAndSets() {
+        myScope.launch {
+            if(LoggedUser.user != null) {
+                myFolders = folderViewModel.getFolderByUserId(LoggedUser.user!!.userId)
+                mySets = setViewModel.getSetByUser(LoggedUser.user!!.userId)
+
+            }
+        }
+    }
+    getFoldersAndSets()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -70,8 +97,10 @@ fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
                         .height(100.dp)
                         .width(100.dp)
                         .padding(20.dp)
-                        .clickable(onClick = { LoggedUser.user=null
-                            navController.navigate("Login") })
+                        .clickable(onClick = {
+                            LoggedUser.user = null
+                            navController.navigate("Login")
+                        })
                     ,
                     tint = Color.Black,
                 )
@@ -110,46 +139,15 @@ fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
                 modifier = modifier
                     .fillMaxWidth()
                     .background(Color(0xFFE08601)),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment=Alignment.CenterVertically
             ){
 
                 Spacer(modifier = Modifier.height(80.dp))
-                Column(
-                    modifier= modifier
-                        .background(Color(0xFFede0d7))
-                        .clip(shape = RoundedCornerShape(30.dp)).
-                        padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.SpaceBetween,
-                ){
-                    Text(
-                        text = "My Folders",
-                        modifier = Modifier.padding(top = 2.dp),
-                        textAlign = TextAlign.Center,
-                        fontSize = 25.sp,
-                        color = Color(0xFF000000)
-                    )
-                    Spacer(modifier=Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text("Statistics", fontSize = 20.sp, color = Color.White)
-                    }
-                    Spacer(modifier=Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text("English 1", fontSize = 20.sp, color = Color.White)
-                    }
-                }
-                Spacer(modifier=Modifier.height(12.dp).background(Color.Gray))
+
+                Spacer(modifier= Modifier
+                    .height(12.dp)
+                    .background(Color.Gray))
                 Column(
                     modifier= modifier
                         .background(Color(0xFFede0d7))
@@ -165,22 +163,10 @@ fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
                         color = Color(0xFF000000)
                     )
                     Spacer(modifier=Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text("Educational Psychology", fontSize = 12.sp, color = Color.White)
-                    }
-                    Spacer(modifier=Modifier.height(20.dp))
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text("HCI", fontSize = 20.sp, color = Color.White)
+                    LazyColumn{
+                        items(mySets) {
+                            item -> SetTemplate(set = item, navController = navController)
+                        }
                     }
                 }
             }
@@ -188,4 +174,17 @@ fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
         }
     }
 
+}
+@Composable
+fun SetTemplate(modifier: Modifier = Modifier, set: Set, navController: NavHostController) {
+    Button(
+        onClick = {
+            LoggedUser.currentSet = set.setId
+            navController.navigate("Cards")
+                  },
+        shape = RoundedCornerShape(50),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
+    ) {
+        Text("${set.name}", fontSize = 18.sp, color = Color.White)
+    }
 }

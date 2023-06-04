@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -44,59 +46,42 @@ import androidx.navigation.NavHostController
 import com.example.flashcards1.data.Folder
 import com.example.flashcards1.data.FolderViewModel
 import kotlinx.coroutines.launch
-import com.example.flashcards1.data.FlashCards1Application
-import com.example.flashcards1.data.MyDatabase
-import com.example.flashcards1.data.FolderDao
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import androidx.compose.material.AlertDialog
+import com.example.flashcards1.data.Card
+import com.example.flashcards1.data.CardViewModel
+import com.example.flashcards1.data.Set
+import com.example.flashcards1.data.SetViewModel
+
+val cards: List<Card> = listOf()
 
 @Composable
-fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderViewModel: FolderViewModel) {
-    val myScope = CoroutineScope(Dispatchers.Default)
+fun Add(modifier: Modifier = Modifier,
+        navController: NavHostController,
+        folderViewModel: FolderViewModel,
+        setViewModel: SetViewModel,
+        cardViewModel: CardViewModel) {
     var title by remember { mutableStateOf("") }
-    var question by remember { mutableStateOf("") }
-    var answer by remember { mutableStateOf("") }
+    var question1 by remember { mutableStateOf("") }
+    var answer1 by remember { mutableStateOf("") }
+    var question2 by remember { mutableStateOf("") }
+    var answer2 by remember { mutableStateOf("") }
+    var question3 by remember { mutableStateOf("") }
+    var answer3 by remember { mutableStateOf("") }
+    var question4 by remember { mutableStateOf("") }
+    var answer4 by remember { mutableStateOf("") }
+    var question5 by remember { mutableStateOf("") }
+    var answer5 by remember { mutableStateOf("") }
+
+    var tempFolder by remember { mutableStateOf("") }
     val isPopupVisible = remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
-    var tempFolder by remember { mutableStateOf("") }
+    val myScope = CoroutineScope(Dispatchers.Default)
+//    var newFolder: Folder? = null
+    var newSet: Set? = null
 
 
-    if (isPopupVisible.value) {
-        AlertDialog(
-            onDismissRequest = { isPopupVisible.value = false },
-            title = { Text(text = "Enter the name of new folder:") },
-            text = {
-                TextField(
-                    value = tempFolder,
-                    onValueChange = { tempFolder = it },
-                    placeholder = { Text("Enter folder name:") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        // Saveing the folder using the tempFolder variable
-                        val newFolder = Folder(name = tempFolder, userId = 0, folderId = 0)
-                        myScope.launch { folderViewModel.insert(newFolder) }
-                        isPopupVisible.value = false
-                              },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))) {
-                    Text(text = "OK")
-                }
-            },
-            dismissButton = {
-                Button(
-                    onClick = { isPopupVisible.value = false },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))) {
-                    Text(text = "Cancel")
-                }
-            }
-        )
-    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -112,9 +97,11 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
             Image(
                 painter = painterResource(R.drawable.back_button),
                 contentDescription = "back button",
-                modifier = Modifier.size(35.dp).clickable{
-                    navController.navigate("Landing Page")
-                }
+                modifier = Modifier
+                    .size(35.dp)
+                    .clickable {
+                        navController.navigate("Landing Page")
+                    }
             )
             Image(
                 painter = painterResource(R.drawable.logo_icon),
@@ -125,14 +112,17 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
             modifier = modifier
                 .fillMaxWidth()
                 .weight(0.7f)
-                .background(Color(0xFFE08601)),
+                .background(Color(0xFFE08601))
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             Column(
-                modifier = modifier.clip(shape = RoundedCornerShape(30.dp))
-                    .background(Color(0xFFD9D9D9)).padding(15.dp)
+                modifier = modifier
+                    .clip(shape = RoundedCornerShape(30.dp))
+                    .background(Color(0xFFD9D9D9))
+                    .padding(15.dp)
                     .clip(shape = RoundedCornerShape(15.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -166,10 +156,6 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
                         .height(55.dp)
                         .width(300.dp)
                         .clickable {
-                            /*val newFolder = Folder(name=name, userId = 0, folderId = 0)
-                            myScope.launch{folderViewModel.insert(newFolder)}
-                            LoggedUser.user = newUser
-                            navController.navigate("Landing Page")*/
 
                         },
 
@@ -182,64 +168,14 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
                         backgroundColor = Color(0xFFFFFFFF)
                     )
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Folder",
-                    modifier = Modifier.padding(top = 20.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
-                    color = Color(0xFF000000)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    modifier = modifier
-                        .clip(shape = RoundedCornerShape(8.dp))
-                        .background(Color(0xFFede0d7))
-                        .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.add_icon),
-                        contentDescription = "add new folder",
-                        modifier = Modifier.size(30.dp).clickable {
-                            isPopupVisible.value = true
 
-                        }
-                    )
-                  /**  Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = {
-                            // Handle click for the dynamically generated folder button
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text(title, fontSize = 20.sp, color = Color.White)
-                    }*/
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text("Statistics", fontSize = 20.sp, color = Color.White)
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text("English 1", fontSize = 20.sp, color = Color.White)
-                    }
-                }
             }
             Spacer(modifier = Modifier.height(12.dp))
             Column(
-                modifier = modifier.clip(shape = RoundedCornerShape(30.dp))
-                    .background(Color(0xFFD9D9D9)).padding(15.dp)
+                modifier = modifier
+                    .clip(shape = RoundedCornerShape(30.dp))
+                    .background(Color(0xFFD9D9D9))
+                    .padding(15.dp)
                     .clip(shape = RoundedCornerShape(15.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -253,7 +189,7 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
-                    value = question,
+                    value = question1,
                     placeholder = { Text("What is the Central Limit Theorem?") },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text,
@@ -266,7 +202,7 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
                     }),
                     singleLine = true,
                     onValueChange = {
-                        question= it
+                        question1= it
                     },
                     modifier = modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -290,7 +226,7 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
-                    value = answer,
+                    value = answer1,
                     placeholder = { Text("states that the distribution of sample means approximates a normal distribution as the sample size gets larger") },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text,
@@ -299,7 +235,7 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
                     keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus()}),
                     singleLine = true,
                     onValueChange = {
-                        answer= it
+                        answer1= it
                     },
                     modifier = modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -314,67 +250,362 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
                         backgroundColor = Color(0xFFFFFFFF)
                     )
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    modifier = modifier
-                        .clip(shape = RoundedCornerShape(8.dp))
-                        .background(Color(0xFFede0d7))
-                        .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text("Private", fontSize = 20.sp, color = Color.White)
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                    ) {
-                        Text("Public", fontSize = 20.sp, color = Color.White)
-                    }
-                }
             }
-            Spacer(modifier = Modifier.height(20.dp))
-            Row() {
-                Button(
-                    onClick = {
+            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                modifier = modifier
+                    .clip(shape = RoundedCornerShape(30.dp))
+                    .background(Color(0xFFD9D9D9))
+                    .padding(15.dp)
+                    .clip(shape = RoundedCornerShape(15.dp)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Question",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    color = Color(0xFF000000)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = question2,
+                    placeholder = { Text("What is the Central Limit Theorem?") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(
+                            FocusDirection.Down
+                        )
+                    }),
+                    singleLine = true,
+                    onValueChange = {
+                        question2= it
                     },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD9D9D9))
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.add_icon),
-                        contentDescription = "add button",
-                        modifier = Modifier.size(30.dp)
+                    modifier = modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .height(55.dp)
+                        .width(300.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        placeholderColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent, // removes underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // removes underline when unfocused
+                        disabledIndicatorColor = Color.Transparent, // removes underline when disabled
+                        backgroundColor = Color(0xFFFFFFFF)
                     )
-                    Text("Add", fontSize = 25.sp, color = Color.Black)
-
-
-                }
-                Button(
-                    onClick = {
+                )
+                Text(
+                    text = "Answer",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    color = Color(0xFF000000)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = answer2,
+                    placeholder = { Text("states that the distribution of sample means approximates a normal distribution as the sample size gets larger") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus()}),
+                    singleLine = true,
+                    onValueChange = {
+                        answer2= it
                     },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
-                ) {
-                    Text("Private", fontSize = 20.sp, color = Color.White)
-                }
+                    modifier = modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .height(55.dp)
+                        .width(300.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        placeholderColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent, // removes underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // removes underline when unfocused
+                        disabledIndicatorColor = Color.Transparent, // removes underline when disabled
+                        backgroundColor = Color(0xFFFFFFFF)
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                modifier = modifier
+                    .clip(shape = RoundedCornerShape(30.dp))
+                    .background(Color(0xFFD9D9D9))
+                    .padding(15.dp)
+                    .clip(shape = RoundedCornerShape(15.dp)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Question",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    color = Color(0xFF000000)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = question3,
+                    placeholder = { Text("What is the Central Limit Theorem?") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(
+                            FocusDirection.Down
+                        )
+                    }),
+                    singleLine = true,
+                    onValueChange = {
+                        question3= it
+                    },
+                    modifier = modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .height(55.dp)
+                        .width(300.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        placeholderColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent, // removes underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // removes underline when unfocused
+                        disabledIndicatorColor = Color.Transparent, // removes underline when disabled
+                        backgroundColor = Color(0xFFFFFFFF)
+                    )
+                )
+                Text(
+                    text = "Answer",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    color = Color(0xFF000000)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = answer3,
+                    placeholder = { Text("states that the distribution of sample means approximates a normal distribution as the sample size gets larger") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus()}),
+                    singleLine = true,
+                    onValueChange = {
+                        answer3= it
+                    },
+                    modifier = modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .height(55.dp)
+                        .width(300.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        placeholderColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent, // removes underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // removes underline when unfocused
+                        disabledIndicatorColor = Color.Transparent, // removes underline when disabled
+                        backgroundColor = Color(0xFFFFFFFF)
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                modifier = modifier
+                    .clip(shape = RoundedCornerShape(30.dp))
+                    .background(Color(0xFFD9D9D9))
+                    .padding(15.dp)
+                    .clip(shape = RoundedCornerShape(15.dp)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Question",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    color = Color(0xFF000000)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = question4,
+                    placeholder = { Text("What is the Central Limit Theorem?") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(
+                            FocusDirection.Down
+                        )
+                    }),
+                    singleLine = true,
+                    onValueChange = {
+                        question4= it
+                    },
+                    modifier = modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .height(55.dp)
+                        .width(300.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        placeholderColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent, // removes underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // removes underline when unfocused
+                        disabledIndicatorColor = Color.Transparent, // removes underline when disabled
+                        backgroundColor = Color(0xFFFFFFFF)
+                    )
+                )
+                Text(
+                    text = "Answer",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    color = Color(0xFF000000)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = answer4,
+                    placeholder = { Text("states that the distribution of sample means approximates a normal distribution as the sample size gets larger") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus()}),
+                    singleLine = true,
+                    onValueChange = {
+                        answer4= it
+                    },
+                    modifier = modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .height(55.dp)
+                        .width(300.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        placeholderColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent, // removes underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // removes underline when unfocused
+                        disabledIndicatorColor = Color.Transparent, // removes underline when disabled
+                        backgroundColor = Color(0xFFFFFFFF)
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                modifier = modifier
+                    .clip(shape = RoundedCornerShape(30.dp))
+                    .background(Color(0xFFD9D9D9))
+                    .padding(15.dp)
+                    .clip(shape = RoundedCornerShape(15.dp)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Question",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    color = Color(0xFF000000)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = question5,
+                    placeholder = { Text("What is the Central Limit Theorem?") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(
+                            FocusDirection.Down
+                        )
+                    }),
+                    singleLine = true,
+                    onValueChange = {
+                        question5= it
+                    },
+                    modifier = modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .height(55.dp)
+                        .width(300.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        placeholderColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent, // removes underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // removes underline when unfocused
+                        disabledIndicatorColor = Color.Transparent, // removes underline when disabled
+                        backgroundColor = Color(0xFFFFFFFF)
+                    )
+                )
+                Text(
+                    text = "Answer",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    color = Color(0xFF000000)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = answer5,
+                    placeholder = { Text("states that the distribution of sample means approximates a normal distribution as the sample size gets larger") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus()}),
+                    singleLine = true,
+                    onValueChange = {
+                        answer5= it
+                    },
+                    modifier = modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .height(55.dp)
+                        .width(300.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        placeholderColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent, // removes underline when focused
+                        unfocusedIndicatorColor = Color.Transparent, // removes underline when unfocused
+                        disabledIndicatorColor = Color.Transparent, // removes underline when disabled
+                        backgroundColor = Color(0xFFFFFFFF)
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.height(40.dp))
+            Row() {
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
+                        myScope.launch {
+                            newSet = LoggedUser.user?.let { Set(privacy = true, name = title, folderId = 0, userId = it.userId) }
+                            newSet?.let { Card(setId = it.setId, answer = answer1, question = question1) }
+                                ?.let { cardViewModel.insert(it) }
+                            newSet?.let { Card(setId = it.setId, answer = answer2, question = question2) }
+                                ?.let { cardViewModel.insert(it) }
+                            newSet?.let { Card(setId = it.setId, answer = answer3, question = question3) }
+                                ?.let { cardViewModel.insert(it) }
+                            newSet?.let { Card(setId = it.setId, answer = answer4, question = question4) }
+                                ?.let { cardViewModel.insert(it) }
+                            newSet?.let { Card(setId = it.setId, answer = answer5, question = question5) }
+                                ?.let { cardViewModel.insert(it) }
+
+                            newSet?.let { setViewModel.insert(set = it) }
+                        }
+                        navController.navigate("Landing Page")
+
                     },
                     shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFefe4dc))
                 ) {
-                    Text("Public", fontSize = 20.sp, color = Color.White)
+                    Text("Save", fontSize = 20.sp, color = Color.Black)
                 }
             }
         }

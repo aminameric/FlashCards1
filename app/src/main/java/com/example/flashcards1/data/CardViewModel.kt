@@ -11,7 +11,7 @@ class CardViewModel (private val cardDao : CardDao): ViewModel(){
 
     fun getCardById(cardId:Int): Card? = cardDao.getCardById(cardId= cardId)
 
-    fun getCardByDeckId(deckId:Int): List<Card>? = cardDao.getCardByDeckId(deckId= deckId)
+    fun getCardBySetId(setId:Int): List<Card> = cardDao.getCardBySetId(setId= setId)
 
     fun insert(card:Card)= cardDao.insert(card)
 
