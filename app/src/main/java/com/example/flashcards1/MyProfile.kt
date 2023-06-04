@@ -80,7 +80,7 @@ fun MyProfile(modifier: Modifier = Modifier, navController: NavHostController) {
         Column(
             modifier= modifier
                 .fillMaxWidth()
-                .weight(0.8f)
+                .weight(0.6f)
                 .background(Color(0xFFE08601)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,

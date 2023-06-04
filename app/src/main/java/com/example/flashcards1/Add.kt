@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -42,10 +43,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.flashcards1.data.Folder
 import com.example.flashcards1.data.FolderViewModel
-import com.example.flashcards1.data.User
+import kotlinx.coroutines.launch
+import com.example.flashcards1.data.FlashCards1Application
+import com.example.flashcards1.data.MyDatabase
+import com.example.flashcards1.data.FolderDao
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.compose.material.AlertDialog
 
 @Composable
 fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderViewModel: FolderViewModel) {
@@ -53,8 +59,44 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
     var title by remember { mutableStateOf("") }
     var question by remember { mutableStateOf("") }
     var answer by remember { mutableStateOf("") }
+    val isPopupVisible = remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+    var tempFolder by remember { mutableStateOf("") }
 
+
+    if (isPopupVisible.value) {
+        AlertDialog(
+            onDismissRequest = { isPopupVisible.value = false },
+            title = { Text(text = "Enter the name of new folder:") },
+            text = {
+                TextField(
+                    value = tempFolder,
+                    onValueChange = { tempFolder = it },
+                    placeholder = { Text("Enter folder name:") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        // Saveing the folder using the tempFolder variable
+                        val newFolder = Folder(name = tempFolder, userId = 0, folderId = 0)
+                        myScope.launch { folderViewModel.insert(newFolder) }
+                        isPopupVisible.value = false
+                              },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))) {
+                    Text(text = "OK")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { isPopupVisible.value = false },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))) {
+                    Text(text = "Cancel")
+                }
+            }
+        )
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -161,10 +203,20 @@ fun Add(modifier: Modifier = Modifier, navController: NavHostController, folderV
                         painter = painterResource(R.drawable.add_icon),
                         contentDescription = "add new folder",
                         modifier = Modifier.size(30.dp).clickable {
+                            isPopupVisible.value = true
 
                         }
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                  /**  Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            // Handle click for the dynamically generated folder button
+                        },
+                        shape = RoundedCornerShape(50),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE08601))
+                    ) {
+                        Text(title, fontSize = 20.sp, color = Color.White)
+                    }*/
                     Button(
                         onClick = {
                         },
